@@ -23,7 +23,7 @@ services:
     volumes:
       - keycloak-data:/opt/keycloak/data
     command:
-      - start-dev
+      - startTime-dev
       - --db=dev-file
 volumes:
   keycloak-data:
