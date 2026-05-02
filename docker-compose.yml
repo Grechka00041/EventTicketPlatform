@@ -1,17 +1,23 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:16-alpine  # Используем стабильную версию, а не latest
     ports:
       - "5432:5432"
     restart: always
     environment:
+      POSTGRES_DB: postgres       # Явно указываем имя БД
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data  # Сохраняем данные
 
   adminer:
     image: adminer:latest
     restart: always
     ports:
       - "8888:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: db  # Важно! Adminer будет по умолчанию подключаться к сервису 'db'
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -20,11 +26,14 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: dev-file  # Правильная переменная для Keycloak 22+
     volumes:
       - keycloak-data:/opt/keycloak/data
     command:
-      - startTime-dev
-      - --db=dev-file
+      - start-dev  # Исправлена опечатка: было startTime-dev
+
 volumes:
+  postgres-data:
+    driver: local
   keycloak-data:
     driver: local

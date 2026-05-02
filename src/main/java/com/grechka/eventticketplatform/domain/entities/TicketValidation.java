@@ -17,7 +17,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class TicketValidation {
     @Id
     @Column(name = "id", updatable = false, nullable = false)

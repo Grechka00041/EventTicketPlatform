@@ -12,7 +12,7 @@
     <artifactId>EventTicketPlatform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>EventTicetPlatform</name>
-    <description>EventTicetPlatform</description>
+    <description>EventTicketPlatform</description>
     <url/>
     <licenses>
         <license/>
@@ -65,11 +65,12 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>42.7.11</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>

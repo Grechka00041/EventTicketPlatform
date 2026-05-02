@@ -9,6 +9,8 @@ import com.grechka.eventticketplatform.repositories.EventRepository;
 import com.grechka.eventticketplatform.repositories.UserRepository;
 import com.grechka.eventticketplatform.services.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +30,8 @@ public class EventServiceImpl implements EventService {
                         String.format("User with id %s not found", organizerId)
                 ));
 
+        Event eventToCreate = new Event();
+
         List<TicketType> ticketTypesToCreate = event.getTicketTypes().stream().map(
                 ticketType -> {
                     TicketType ticketTypeToCreate = new TicketType();
@@ -35,11 +39,11 @@ public class EventServiceImpl implements EventService {
                     ticketTypeToCreate.setDescription(ticketType.getDescription());
                     ticketTypeToCreate.setPrice(ticketType.getPrice());
                     ticketTypeToCreate.setTotalAvailable(ticketType.getTotalAvailable());
+                    ticketTypeToCreate.setEvent(eventToCreate);
                     return ticketTypeToCreate;
                 }
         ).toList();
 
-        Event eventToCreate = new Event();
         eventToCreate.setName(event.getName());
         eventToCreate.setOrganizer(organizer);
         eventToCreate.setStartTime(event.getStartTime());
@@ -51,4 +55,11 @@ public class EventServiceImpl implements EventService {
 
         return eventRepository.save(eventToCreate);
     }
+
+    @Override
+    public Page<Event> listEventsForOrganizer(UUID organizerId, Pageable pageable) {
+        return eventRepository.findByOrganizerId(organizerId, pageable);
+    }
+
+
 }

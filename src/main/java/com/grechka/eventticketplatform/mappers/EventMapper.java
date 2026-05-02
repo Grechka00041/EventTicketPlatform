@@ -2,10 +2,9 @@ package com.grechka.eventticketplatform.mappers;
 
 import com.grechka.eventticketplatform.domain.CreateEventRequest;
 import com.grechka.eventticketplatform.domain.CreateTicketTypeRequest;
-import com.grechka.eventticketplatform.domain.dtos.CreateEventRequestDto;
-import com.grechka.eventticketplatform.domain.dtos.CreateEventResponseDto;
-import com.grechka.eventticketplatform.domain.dtos.CreateTicketTypeRequestDto;
+import com.grechka.eventticketplatform.domain.dtos.*;
 import com.grechka.eventticketplatform.domain.entities.Event;
+import com.grechka.eventticketplatform.domain.entities.TicketType;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -16,6 +15,12 @@ public interface EventMapper {
     CreateEventRequest fromDto(CreateEventRequestDto dto);
 
     CreateEventResponseDto toDto(Event event);
+
+    ListEventTicketTypeResponseDto toDto(TicketType ticketType);
+
+    ListEventResponseDto toListEventResponseDto(Event event);
+
+
 
 
 }
