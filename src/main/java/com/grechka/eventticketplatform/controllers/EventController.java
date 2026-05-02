@@ -3,13 +3,13 @@ package com.grechka.eventticketplatform.controllers;
 import com.grechka.eventticketplatform.domain.CreateEventRequest;
 import com.grechka.eventticketplatform.domain.dtos.CreateEventRequestDto;
 import com.grechka.eventticketplatform.domain.dtos.CreateEventResponseDto;
+import com.grechka.eventticketplatform.domain.dtos.GetEventDetailsResponseDto;
 import com.grechka.eventticketplatform.domain.dtos.ListEventResponseDto;
 import com.grechka.eventticketplatform.domain.entities.Event;
 import com.grechka.eventticketplatform.mappers.EventMapper;
 import com.grechka.eventticketplatform.services.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -49,7 +49,20 @@ public class EventController {
         return ResponseEntity.ok(events.map(eventMapper::toListEventResponseDto));
     }
 
-    private UUID parseUserId(Jwt jwt){
+    @GetMapping(path = "/{eventId}")
+    public ResponseEntity<GetEventDetailsResponseDto> getEvent(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID eventId
+    ){
+        UUID userId = parseUserId(jwt);
+        return eventService.getEventForOrganizer(userId, eventId)
+                .map(eventMapper::toGetEventDetailsResponseDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    private UUID parseUserId(Jwt jwt) {
+
         return UUID.fromString(jwt.getSubject());
     }
 
