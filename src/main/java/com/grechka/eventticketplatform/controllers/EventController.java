@@ -1,10 +1,8 @@
 package com.grechka.eventticketplatform.controllers;
 
 import com.grechka.eventticketplatform.domain.CreateEventRequest;
-import com.grechka.eventticketplatform.domain.dtos.CreateEventRequestDto;
-import com.grechka.eventticketplatform.domain.dtos.CreateEventResponseDto;
-import com.grechka.eventticketplatform.domain.dtos.GetEventDetailsResponseDto;
-import com.grechka.eventticketplatform.domain.dtos.ListEventResponseDto;
+import com.grechka.eventticketplatform.domain.UpdateEventRequest;
+import com.grechka.eventticketplatform.domain.dtos.*;
 import com.grechka.eventticketplatform.domain.entities.Event;
 import com.grechka.eventticketplatform.mappers.EventMapper;
 import com.grechka.eventticketplatform.services.EventService;
@@ -39,6 +37,18 @@ public class EventController {
         return new ResponseEntity<>(createdEventResponseDto, HttpStatus.CREATED);
     }
 
+    @PutMapping(path = "/{eventId}")
+    public ResponseEntity<UpdateEventResponseDto> updateEvent(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID eventId,
+            @Valid @RequestBody UpdateEventRequestDto updateEventRequestDto){
+        UpdateEventRequest updateEventRequest = eventMapper.fromDto(updateEventRequestDto);
+        UUID userId = parseUserId(jwt);
+        Event updatedEvent = eventService.updateEventForOrganizer(userId, eventId, updateEventRequest);
+        UpdateEventResponseDto updatedEventResponseDto = eventMapper.toUpdateEventResponseDto(updatedEvent);
+        return ResponseEntity.ok(updatedEventResponseDto);
+    }
+
     @GetMapping
     public ResponseEntity<Page<ListEventResponseDto>> listEvents(
             @AuthenticationPrincipal Jwt jwt,
@@ -59,6 +69,15 @@ public class EventController {
                 .map(eventMapper::toGetEventDetailsResponseDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping(path = "/{eventId}")
+    public ResponseEntity<Void> deleteEvent(
+            @AuthenticationPrincipal Jwt jwt, @PathVariable UUID eventId
+    ){
+        UUID userId = parseUserId(jwt);
+        eventService.deleteEventForOrganizer(userId, eventId);
+        return ResponseEntity.noContent().build();
     }
 
     private UUID parseUserId(Jwt jwt) {
