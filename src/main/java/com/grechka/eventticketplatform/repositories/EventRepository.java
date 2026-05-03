@@ -1,15 +1,32 @@
 package com.grechka.eventticketplatform.repositories;
 
 import com.grechka.eventticketplatform.domain.entities.Event;
+import com.grechka.eventticketplatform.domain.enums.EventStatusEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
-    public Page<Event> findByOrganizerId(UUID organizerId, Pageable pageable);
-    public Optional<Event> findByIdAndOrganizerId(UUID id, UUID organizerId);
+    Page<Event> findByOrganizerId(UUID organizerId, Pageable pageable);
+    Optional<Event> findByIdAndOrganizerId(UUID id, UUID organizerId);
+    Page<Event> findByStatus(EventStatusEnum statusEnum, Pageable pageable);
+
+    @Query(value = "SELECT * FROM events WHERE " +
+            "status = 'PUBLISHED' AND " +
+            "to_tsvector('english', COALESCE(name, '') || ' ' || COALESCE(venue, '')) " +
+            "@@ plainto_tsquery('english', :searchTerm)",
+            countQuery = "SELECT count(*) FROM events WHERE " +
+                    "status = 'PUBLISHED' AND " +
+                    "to_tsvector('english', COALESCE(name, '') || ' ' || COALESCE(venue, '')) " +
+                    "@@ plainto_tsquery('english', :searchTerm)",
+            nativeQuery = true)
+    Page<Event> searchEvents(@Param("searchTerm") String searchTerm, Pageable pageable);
+
+    Optional<Event> findByIdAndStatus(UUID id, EventStatusEnum statusEnum);
 }

@@ -6,6 +6,7 @@ import com.grechka.eventticketplatform.domain.UpdateTicketTypeRequest;
 import com.grechka.eventticketplatform.domain.entities.Event;
 import com.grechka.eventticketplatform.domain.entities.TicketType;
 import com.grechka.eventticketplatform.domain.entities.User;
+import com.grechka.eventticketplatform.domain.enums.EventStatusEnum;
 import com.grechka.eventticketplatform.exceptions.EventNotFoundException;
 import com.grechka.eventticketplatform.exceptions.EventUpdateException;
 import com.grechka.eventticketplatform.exceptions.TicketTypeNotFoundException;
@@ -139,6 +140,21 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public void deleteEventForOrganizer(UUID organizerId, UUID id) {
         getEventForOrganizer(organizerId, id).ifPresent(eventRepository::delete);
+    }
+
+    @Override
+    public Page<Event> listPublishedEvents(Pageable pageable) {
+        return eventRepository.findByStatus(EventStatusEnum.PUBLISHED, pageable);
+    }
+
+    @Override
+    public Page<Event> searchPublishedEvents(String query, Pageable pageable) {
+        return eventRepository.searchEvents(query, pageable);
+    }
+
+    @Override
+    public Optional<Event> getPublishedEvent(UUID id) {
+        return eventRepository.findByIdAndStatus(id, EventStatusEnum.PUBLISHED);
     }
 
 }
