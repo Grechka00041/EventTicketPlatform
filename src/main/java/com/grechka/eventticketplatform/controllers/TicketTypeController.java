@@ -1,6 +1,5 @@
 package com.grechka.eventticketplatform.controllers;
 
-import com.grechka.eventticketplatform.domain.entities.TicketType;
 import com.grechka.eventticketplatform.services.TicketTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

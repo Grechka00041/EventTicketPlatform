@@ -1,6 +1,5 @@
 package com.grechka.eventticketplatform.repositories;
 
-import com.grechka.eventticketplatform.domain.entities.Ticket;
 import com.grechka.eventticketplatform.domain.entities.TicketType;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;

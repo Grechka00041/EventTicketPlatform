@@ -1,6 +1,5 @@
 package com.grechka.eventticketplatform.domain.dtos;
 
-import com.grechka.eventticketplatform.domain.entities.TicketType;
 import com.grechka.eventticketplatform.domain.enums.TicketStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -5,7 +5,6 @@ import com.grechka.eventticketplatform.domain.dtos.ListTicketResponseDto;
 import com.grechka.eventticketplatform.mappers.TicketMapper;
 import com.grechka.eventticketplatform.services.QrCodeService;
 import com.grechka.eventticketplatform.services.TicketService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

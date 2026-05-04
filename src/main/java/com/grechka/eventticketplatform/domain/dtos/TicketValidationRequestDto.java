@@ -1,7 +1,6 @@
 package com.grechka.eventticketplatform.domain.dtos;
 
 import com.grechka.eventticketplatform.domain.enums.TicketValidationMethodEnum;
-import com.grechka.eventticketplatform.domain.enums.TicketValidationStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
