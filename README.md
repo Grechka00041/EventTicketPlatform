@@ -47,6 +47,3 @@
 - **Keycloak** (Identity and Access Management)
 - **Maven** (Build tool)
 
-
-```bash
-docker-compose up -d
